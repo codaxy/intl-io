@@ -21,6 +21,10 @@ describe('DateParser', function() {
     it('parses correctly de 1,1', function() {
         var parser = new DateParser('de');
         var fmt = new Intl.DateTimeFormat('de');
-        parser.parse(fmt.format(new Date()));
+        var inputDate = new Date();
+        var parsedDate = parser.parse(fmt.format(inputDate));
+        assert.equal(inputDate.getDate(), parsedDate.getDate());
+        assert.equal(inputDate.getMonth(), parsedDate.getMonth());
+        assert.equal(inputDate.getFullYear(), parsedDate.getFullYear());
     })
 });

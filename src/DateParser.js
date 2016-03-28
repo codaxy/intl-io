@@ -79,8 +79,8 @@ export class DateParser {
             .replace(11, 'month')
             .replace(22, 'date');
 
-        console.log(monthNames, weekdayNames, localeDate, localeDateFmt);
-        this.localeDateFmt = localeDateFmt;
+        //console.log(monthNames, weekdayNames, localeDate, localeDateFmt);
+        //this.localeDateFmt = localeDateFmt;
         this.dateParts = split(localeDateFmt).alphas;
     }
 
@@ -115,6 +115,6 @@ export class DateParser {
             }
         });
 
-        console.log(result);
+        return new Date(result.year, result.month - 1, result.date, result.hour, result.minute, result.second);
     }
 }
