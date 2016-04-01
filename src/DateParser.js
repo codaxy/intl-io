@@ -79,19 +79,20 @@ export class DateParser {
             .replace(11, 'month')
             .replace(22, 'date');
 
-        //console.log(monthNames, weekdayNames, localeDate, localeDateFmt);
-        //this.localeDateFmt = localeDateFmt;
         this.dateParts = split(localeDateFmt).alphas;
     }
 
-    parse(text) {
+    parse(text, { useCurrentDateForDefaults } = { useCurrentDateForDefaults: false }) {
+
+        if (typeof text != 'string')
+            return null;
 
         var parts = split(text);
 
         var result = {
-            year: -1,
-            month: -1,
-            date: -1,
+            year: undefined,
+            month: undefined,
+            date: undefined,
             hour: 0,
             minute: 0,
             second: 0
@@ -100,14 +101,14 @@ export class DateParser {
         //console.log(numbers, alphas);
 
         parts.numbers.forEach(value => {
-            if (value > 1000)
+            if (value >= 1970)
                 result.year = value;
             else if (value > 12)
                 result.date = value;
             else {
                 for (var dp = 0; dp < this.dateParts.length; dp++) {
                     let name = this.dateParts[dp];
-                    if (result[name] == -1) {
+                    if (result[name] == undefined) {
                         result[name] = value;
                         break;
                     }
@@ -115,6 +116,28 @@ export class DateParser {
             }
         });
 
-        return new Date(result.year, result.month - 1, result.date, result.hour, result.minute, result.second);
+        if (useCurrentDateForDefaults && result.date == undefined)
+            if (result.month == undefined)
+                result.date = new Date().getDate();
+            else
+                result.date = 1;
+
+        if (useCurrentDateForDefaults && result.month == undefined)
+            result.month = new Date().getMonth() + 1;
+
+        if (useCurrentDateForDefaults && result.year == undefined)
+            result.year = new Date().getFullYear();
+
+        if (result.year >= 1970 &&
+            result.date >= 1 && result.date <= 31 &&
+            result.month >= 1 && result.month <= 12)
+            return new Date(result.year,
+                result.month - 1,
+                result.date,
+                result.hour,
+                result.minute,
+                result.second);
+
+        return Number.NaN;
     }
 }
