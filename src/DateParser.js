@@ -116,17 +116,22 @@ export class DateParser {
             }
         });
 
-        if (useCurrentDateForDefaults && result.date == undefined)
+        if (useCurrentDateForDefaults) {
+            if (result.date == undefined)
+                if (result.month == undefined)
+                    result.date = new Date().getDate();
+                else
+                    result.date = 1;
+
             if (result.month == undefined)
-                result.date = new Date().getDate();
-            else
-                result.date = 1;
+                if (result.year == undefined)
+                    result.month = new Date().getMonth() + 1;
+                else
+                    result.month = 1;
 
-        if (useCurrentDateForDefaults && result.month == undefined)
-            result.month = new Date().getMonth() + 1;
-
-        if (useCurrentDateForDefaults && result.year == undefined)
-            result.year = new Date().getFullYear();
+            if (result.year == undefined)
+                result.year = new Date().getFullYear();
+        }
 
         if (result.year >= 1970 &&
             result.date >= 1 && result.date <= 31 &&
