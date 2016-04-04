@@ -11,6 +11,10 @@ export class NumberParser {
     }
 
     parse(text) {
+
+        if (typeof text != 'string' || !text)
+            return null;
+
         var clean = '';
         for (var i = 0; i < text.length; i++)
             if (text[i] == this.decimalSeparator || (text[i] >= '0' && text[i] <= '9') || text[i] == '-')

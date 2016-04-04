@@ -84,7 +84,7 @@ export class DateParser {
 
     parse(text, { useCurrentDateForDefaults } = { useCurrentDateForDefaults: false }) {
 
-        if (typeof text != 'string')
+        if (typeof text != 'string' || !text)
             return null;
 
         var parts = split(text);
