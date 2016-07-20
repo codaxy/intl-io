@@ -11,7 +11,7 @@ export class DateTimeCulture {
     }
 
     getFormatter(options) {
-        return new Intl.DateTimeFormat(this.cultures, options);
+        return new Intl.DateTimeFormat(this.cultures, parseOptions(options));
     }
 
     getWeekdayNames(fmt) {
@@ -144,6 +144,110 @@ export class DateTimeCulture {
         this.dateParts = extractParts(localeDateFmt).alphas;
         this.loaded = true;
     }
+}
+
+function parseOptions(fmt) {
+    if (typeof fmt != 'string')
+        return fmt;
+
+    var count = {
+        Y: 0, //year
+        y: 0, //year
+        M: 0, //months
+        D: 0, //day name
+        d: 0, //day
+        H: 0, //hours
+        h: 0, //hours
+        m: 0, //minutes
+        i: 0, //minutes,
+        S: 0, //seconds
+        s: 0, //seconds
+        A: 0, //hour12 AM/PM
+        a: 0, //hour12 AM/PM
+        P: 0, //hour12 AM/PM
+        p: 0, //hour12 AM/PM
+        N: 0, //hour24
+        n: 0, //hour24
+        T: 0, //timezone
+        t: 0, //timezone
+        U: 0, //timezone
+        u: 0, //timezone
+        Z: 0, //timezone
+        z: 0  //timezone
+    };
+
+    for (var i = 0; i < fmt.length; i++)
+        count[fmt[i]]++;
+
+    var options = {};
+
+    var year = count.Y + count.y;
+    if (year > 2)
+        options.year = 'numeric';
+    else if (year > 0)
+        options.year = '2-digit';
+
+    var month = count.M;
+    if (month > 3)
+        options.month = 'long';
+    else if (month > 2)
+        options.month = 'short';
+    else if (month > 1)
+        options.month = '2-digit';
+    else if (month > 0)
+        options.month = 'numeric';
+
+    var day = count.d;
+    if (day > 1)
+        options.day = '2-digit';
+    else if (day > 0)
+        options.day = 'numeric';
+
+    var weekday = count.D;
+    if (weekday > 3)
+        options.weekday = 'long';
+    if (weekday > 1)
+        options.weekday = 'short';
+    else if (weekday > 0)
+        options.weekday = 'narrow';
+
+    var hours = count.H + count.h;
+    if (hours > 1)
+        options.hour = '2-digit';
+    else if (hours > 0)
+        options.hour = 'numeric';
+
+    var minute = count.m;
+    if (minute > 1)
+        options.minute = '2-digit';
+    else if (minute > 0)
+        options.minute = 'numeric';
+
+    var second = count.S + count.s;
+    if (second > 1)
+        options.second = '2-digit';
+    else if (second > 0)
+        options.second = 'numeric';
+
+    var timeZoneName = count.T + count.t;
+    if (timeZoneName > 3)
+        options.timeZoneName = 'long';
+    else if (timeZoneName > 0)
+        options.timeZoneName = 'short';
+
+    var hour12 = count.A + count.a + count.P + count.p;
+    if (hour12)
+        options.hour12 = true;
+
+    var noctis = count.N + count.n
+    if (noctis)
+        options.hour12 = false;
+
+    var utc = count.U + count.u + count.Z + count.z;
+    if (utc > 0)
+        options.timeZone = 'UTC';
+
+    return options;
 }
 
 function extractParts(text) {

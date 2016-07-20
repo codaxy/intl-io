@@ -63,6 +63,28 @@ describe('DateTimeCulture', function() {
         assert.equal(12, date.getMonth() + 1);
         assert.equal(1982, date.getFullYear());
     });
+
+    it('accepts date string formats', function () {
+        var culture = new DateTimeCulture('sr-latn');
+        assert.equal('04.12.1982.', culture.format(new Date(1982, 11, 4), 'yyyyMMdd'));
+        assert.equal('4. dec 1982.', culture.format(new Date(1982, 11, 4), 'yyyyMMMd'));
+        assert.equal('4. decembar 1982.', culture.format(new Date(1982, 11, 4), 'yyyyMMMMd'));
+    });
+
+    it('accepts time string formats', function () {
+        var culture = new DateTimeCulture('en');
+        var time = new Date(2000, 1, 1, 7, 8, 9);
+        assert.equal('7:8:9 AM', culture.format(time, 'h:m:s'));
+        assert.equal('7:8:9 AM', culture.format(time, 'h:m:s A'));
+        assert.equal('7:8:9', culture.format(time, 'h m s N'));
+        assert.equal('07:08:09', culture.format(time, 'hhmmss N'));
+    });
+
+    it('accepts datetime string formats', function () {
+        var culture = new DateTimeCulture('en');
+        var time = new Date(2000, 1, 1, 17, 8, 9);
+        assert.equal('2/1/2000, 05:08 PM', culture.format(time, 'yyyyMd hhmm'));
+    });
 });
 
 describe('NumberCulture', function() {
