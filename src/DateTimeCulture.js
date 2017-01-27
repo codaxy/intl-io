@@ -1,6 +1,11 @@
 export const weekdayFormats = ["narrow", "short", "long"];
 export const monthFormats = ["narrow", "short", "long"];
 
+const defaultOptions = {
+    useCurrentDateForDefaults: false,
+    loose: false
+};
+
 export class DateTimeCulture {
     constructor(cultures) {
         this.cultures = cultures;
@@ -24,16 +29,16 @@ export class DateTimeCulture {
         return this.monthNames.map(x=>x[fmt]);
     }
 
-    parse(text, { useCurrentDateForDefaults } = { useCurrentDateForDefaults: false }) {
+    parse(text, { useCurrentDateForDefaults, loose } = defaultOptions) {
 
         if (typeof text != 'string' || !text)
             return null;
 
         this.load();
 
-        var parts = extractParts(text);
+        let parts = extractParts(text);
 
-        var result = {
+        let result = {
             year: undefined,
             month: undefined,
             date: undefined,
@@ -42,14 +47,16 @@ export class DateTimeCulture {
             second: 0
         };
 
+        let unmatchedPart = false;
+
         parts.alphas.forEach(value => {
-            for (var i = 0; i < 12; i++)
-                for (var fmt in this.monthNames[i])
+            for (let i = 0; i < 12; i++)
+                for (let fmt in this.monthNames[i])
                     if (value == this.monthNames[i][fmt].toLowerCase()) {
                         result.month = i + 1;
-                        i = 12; //outer break
-                        break;
+                        return;
                     }
+            unmatchedPart = true;
         });
 
         parts.numbers.forEach(value => {
@@ -58,15 +65,19 @@ export class DateTimeCulture {
             else if (value > 12)
                 result.date = value;
             else {
-                for (var dp = 0; dp < this.dateParts.length; dp++) {
+                for (let dp = 0; dp < this.dateParts.length; dp++) {
                     let name = this.dateParts[dp];
                     if (result[name] == undefined) {
                         result[name] = value;
-                        break;
+                        return;
                     }
                 }
+                unmatchedPart = true;
             }
         });
+
+        if (unmatchedPart && !loose)
+            return NaN;
 
         if (useCurrentDateForDefaults) {
             if (result.date == undefined)
@@ -103,14 +114,14 @@ export class DateTimeCulture {
         if (this.loaded)
             return;
 
-        var i;
+        let i;
 
-        var monthNames = [];
-        for (var m = 0; m < 12; m++)
+        let monthNames = [];
+        for (let m = 0; m < 12; m++)
             monthNames.push({});
 
         monthFormats.forEach(monthFormat => {
-            var dateFormat = new Intl.DateTimeFormat(this.cultures, {month: monthFormat});
+            let dateFormat = new Intl.DateTimeFormat(this.cultures, {month: monthFormat});
             for (i = 0; i < 12; i++) {
                 monthNames[i][monthFormat] = dateFormat.format(new Date(2000, i, 1));
             }
@@ -119,12 +130,12 @@ export class DateTimeCulture {
         this.monthNames = monthNames;
 
 
-        var weekdayNames = [];
+        let weekdayNames = [];
         for (i = 0; i < 7; i++)
             weekdayNames.push({});
 
         weekdayFormats.forEach(weekdayFormat => {
-            var dateFormat = new Intl.DateTimeFormat(this.cultures, {weekday: weekdayFormat});
+            let dateFormat = new Intl.DateTimeFormat(this.cultures, {weekday: weekdayFormat});
             for (i = 0; i < 7; i++) {
                 let date = new Date(2000, 0, i);
                 weekdayNames[date.getDay()][weekdayFormat] = dateFormat.format(date);
@@ -134,9 +145,9 @@ export class DateTimeCulture {
         this.weekdayNames = weekdayNames;
 
 
-        var testDate = new Date(2077, 10, 22);
-        var localeDate = new Intl.DateTimeFormat(this.cultures).format(testDate);
-        var localeDateFmt = localeDate
+        let testDate = new Date(2077, 10, 22);
+        let localeDate = new Intl.DateTimeFormat(this.cultures).format(testDate);
+        let localeDateFmt = localeDate
             .replace(2077, 'year')
             .replace(11, 'month')
             .replace(22, 'date');
@@ -150,7 +161,7 @@ function parseOptions(fmt) {
     if (typeof fmt != 'string')
         return fmt;
 
-    var count = {
+    let count = {
         Y: 0, //year
         y: 0, //year
         M: 0, //months
@@ -176,18 +187,18 @@ function parseOptions(fmt) {
         z: 0  //timezone
     };
 
-    for (var i = 0; i < fmt.length; i++)
+    for (let i = 0; i < fmt.length; i++)
         count[fmt[i]]++;
 
-    var options = {};
+    let options = {};
 
-    var year = count.Y + count.y;
+    let year = count.Y + count.y;
     if (year > 2)
         options.year = 'numeric';
     else if (year > 0)
         options.year = '2-digit';
 
-    var month = count.M;
+    let month = count.M;
     if (month > 3)
         options.month = 'long';
     else if (month > 2)
@@ -197,13 +208,13 @@ function parseOptions(fmt) {
     else if (month > 0)
         options.month = 'numeric';
 
-    var day = count.d;
+    let day = count.d;
     if (day > 1)
         options.day = '2-digit';
     else if (day > 0)
         options.day = 'numeric';
 
-    var weekday = count.D;
+    let weekday = count.D;
     if (weekday > 3)
         options.weekday = 'long';
     if (weekday > 1)
@@ -211,39 +222,39 @@ function parseOptions(fmt) {
     else if (weekday > 0)
         options.weekday = 'narrow';
 
-    var hours = count.H + count.h;
+    let hours = count.H + count.h;
     if (hours > 1)
         options.hour = '2-digit';
     else if (hours > 0)
         options.hour = 'numeric';
 
-    var minute = count.m;
+    let minute = count.m;
     if (minute > 1)
         options.minute = '2-digit';
     else if (minute > 0)
         options.minute = 'numeric';
 
-    var second = count.S + count.s;
+    let second = count.S + count.s;
     if (second > 1)
         options.second = '2-digit';
     else if (second > 0)
         options.second = 'numeric';
 
-    var timeZoneName = count.T + count.t;
+    let timeZoneName = count.T + count.t;
     if (timeZoneName > 3)
         options.timeZoneName = 'long';
     else if (timeZoneName > 0)
         options.timeZoneName = 'short';
 
-    var hour12 = count.A + count.a + count.P + count.p;
+    let hour12 = count.A + count.a + count.P + count.p;
     if (hour12)
         options.hour12 = true;
 
-    var noctis = count.N + count.n
+    let noctis = count.N + count.n
     if (noctis)
         options.hour12 = false;
 
-    var utc = count.U + count.u + count.Z + count.z;
+    let utc = count.U + count.u + count.Z + count.z;
     if (utc > 0)
         options.timeZone = 'UTC';
 
@@ -251,16 +262,16 @@ function parseOptions(fmt) {
 }
 
 function extractParts(text) {
-    var numbers = [];
-    var alphas = [];
+    let numbers = [];
+    let alphas = [];
 
-    var mode = '',
+    let mode = '',
         newMode,
         c,
         start = 0,
         part;
 
-    for (var i = 0; i <= text.length; i++) {
+    for (let i = 0; i <= text.length; i++) {
         if (i == text.length)
             newMode = 'end';
         else {

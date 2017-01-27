@@ -4,8 +4,8 @@ export class NumberCulture {
     }
 
     load() {
-        var numberFormat = new Intl.NumberFormat(this.cultures);
-        var text = numberFormat.format('0.1');
+        let numberFormat = new Intl.NumberFormat(this.cultures);
+        let text = numberFormat.format('0.1');
         this.decimalSeparator = text[1];
         this.decimalSepRegex = new RegExp('\\' + this.decimalSeparator, 'g');
     }
@@ -18,12 +18,12 @@ export class NumberCulture {
         if (!this.decimalSeparator)
             this.load();
 
-        var clean = '';
-        for (var i = 0; i < text.length; i++)
+        let clean = '';
+        for (let i = 0; i < text.length; i++)
             if (text[i] == this.decimalSeparator || (text[i] >= '0' && text[i] <= '9') || text[i] == '-')
                 clean += text[i];
 
-        var en = clean.replace(this.decimalSepRegex, '.');
+        let en = clean.replace(this.decimalSepRegex, '.');
         return parseFloat(en);
     }
 
