@@ -7,6 +7,12 @@
     "test": "mocha",
     "build": "rollup -c rollup.config.js"
   },
+  "files": [
+    "dist",
+    "src",
+    "LICENSE",
+    "README.md"
+  ],
   "author": "Marko Stijak",
   "license": "MIT",
   "devDependencies": {
