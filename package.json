@@ -4,7 +4,8 @@
   "description": "Intl based number and date formatting and parsing.",
   "main": "dist/index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "build": "rollup -c rollup.config.js"
   },
   "author": "Marko Stijak",
   "license": "MIT",
