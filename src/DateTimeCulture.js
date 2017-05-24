@@ -31,12 +31,14 @@ export class DateTimeCulture {
 
     parse(text, { useCurrentDateForDefaults, loose } = defaultOptions) {
 
-        if (typeof text != 'string' || !text)
+        if (typeof text !== 'string' || !text)
             return null;
 
         this.load();
 
-        let parts = extractParts(text);
+        let {date, time} = splitDateAndTime(text);
+
+        let dateParts = extractParts(date);
 
         let result = {
             year: undefined,
@@ -49,17 +51,17 @@ export class DateTimeCulture {
 
         let unmatchedPart = false;
 
-        parts.alphas.forEach(value => {
+        dateParts.alphas.forEach(value => {
             for (let i = 0; i < 12; i++)
                 for (let fmt in this.monthNames[i])
-                    if (value == this.monthNames[i][fmt].toLowerCase()) {
+                    if (value === this.monthNames[i][fmt].toLowerCase()) {
                         result.month = i + 1;
                         return;
                     }
             unmatchedPart = true;
         });
 
-        parts.numbers.forEach(value => {
+        dateParts.numbers.forEach(value => {
             if (value >= 1970)
                 result.year = value;
             else if (value > 12)
@@ -67,7 +69,7 @@ export class DateTimeCulture {
             else {
                 for (let dp = 0; dp < this.dateParts.length; dp++) {
                     let name = this.dateParts[dp];
-                    if (result[name] == undefined) {
+                    if (result[name] === undefined) {
                         result[name] = value;
                         return;
                     }
@@ -80,21 +82,31 @@ export class DateTimeCulture {
             return NaN;
 
         if (useCurrentDateForDefaults) {
-            if (result.date == undefined)
-                if (result.month == undefined)
+            if (result.date === undefined)
+                if (result.month === undefined)
                     result.date = new Date().getDate();
                 else
                     result.date = 1;
 
-            if (result.month == undefined)
-                if (result.year == undefined)
+            if (result.month === undefined)
+                if (result.year === undefined)
                     result.month = new Date().getMonth() + 1;
                 else
                     result.month = 1;
 
-            if (result.year == undefined)
+            if (result.year === undefined)
                 result.year = new Date().getFullYear();
         }
+
+        let timeComponent = ['hour', 'minute', 'second'];
+        let timeParts = extractParts(time);
+        for (let i = 0; i<Math.min(timeParts.numbers.length, timeComponent.length); i++)
+            result[timeComponent[i]] = timeParts.numbers[i];
+
+        timeParts.alphas.forEach(x => {
+            if (x.toLowerCase() === 'pm' && result.hour < 12)
+                result.hour += 12;
+        });
 
         if (result.year >= 1970 &&
             result.date >= 1 && result.date <= 31 &&
@@ -158,7 +170,7 @@ export class DateTimeCulture {
 }
 
 function parseOptions(fmt) {
-    if (typeof fmt != 'string')
+    if (typeof fmt !== 'string')
         return fmt;
 
     let count = {
@@ -250,7 +262,7 @@ function parseOptions(fmt) {
     if (hour12)
         options.hour12 = true;
 
-    let noctis = count.N + count.n
+    let noctis = count.N + count.n;
     if (noctis)
         options.hour12 = false;
 
@@ -259,6 +271,23 @@ function parseOptions(fmt) {
         options.timeZone = 'UTC';
 
     return options;
+}
+
+function splitDateAndTime(text) {
+    let split = text.indexOf(':');
+    if (split === -1)
+        return {
+            date: text,
+            time: ''
+        };
+
+    while (split > 0 && text[split - 1] >= '0' && text[split - 1] <= '9')
+        split--;
+
+    return {
+        date: text.substring(0, split),
+        time: text.substring(split)
+    }
 }
 
 function extractParts(text) {
@@ -272,7 +301,7 @@ function extractParts(text) {
         part;
 
     for (let i = 0; i <= text.length; i++) {
-        if (i == text.length)
+        if (i === text.length)
             newMode = 'end';
         else {
             c = text[i];
@@ -284,14 +313,14 @@ function extractParts(text) {
                 newMode = 'sep';
         }
 
-        if (newMode == mode)
+        if (newMode === mode)
             continue;
 
         if (i > start) {
             part = text.substring(start, i);
-            if (mode == 'alpha')
+            if (mode === 'alpha')
                 alphas.push(part.toLowerCase());
-            else if (mode == 'number')
+            else if (mode === 'number')
                 numbers.push(parseInt(part));
         }
 

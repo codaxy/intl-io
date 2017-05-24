@@ -57,6 +57,51 @@ describe('DateTimeCulture', function() {
         assert.equal(1982, date.getFullYear());
     });
 
+    it('parses time', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('December 4, 1982 16:17', {useCurrentDateForDefaults: true});
+        assert.equal(4, date.getDate());
+        assert.equal(12, date.getMonth() + 1);
+        assert.equal(1982, date.getFullYear());
+        assert.equal(16, date.getHours());
+        assert.equal(17, date.getMinutes());
+    });
+
+    it('parses time and respects AM', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('December 4, 1982 11:17 AM', {useCurrentDateForDefaults: true});
+        assert.equal(4, date.getDate());
+        assert.equal(12, date.getMonth() + 1);
+        assert.equal(1982, date.getFullYear());
+        assert.equal(11, date.getHours());
+        assert.equal(17, date.getMinutes());
+    });
+
+    it('parses time and respects PM', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('December 4, 1982 11:17 PM', {useCurrentDateForDefaults: true});
+        assert.equal(4, date.getDate());
+        assert.equal(12, date.getMonth() + 1);
+        assert.equal(1982, date.getFullYear());
+        assert.equal(23, date.getHours());
+        assert.equal(17, date.getMinutes());
+    });
+
+    it('ignores PM specifier in 24 hours time', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('23:17 PM', {useCurrentDateForDefaults: true});
+        assert.equal(23, date.getHours());
+        assert.equal(17, date.getMinutes());
+    });
+
+    it('parses time with seconds', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('23:17:13', {useCurrentDateForDefaults: true});
+        assert.equal(23, date.getHours());
+        assert.equal(17, date.getMinutes());
+        assert.equal(13, date.getSeconds());
+    });
+
     it('parses long month names in sr-latn culture', function () {
         let culture = new DateTimeCulture('sr-latn');
         let date = culture.parse('Decembar 4, 1982', {useCurrentDateForDefaults: true});
