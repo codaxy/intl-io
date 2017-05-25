@@ -87,6 +87,26 @@ describe('DateTimeCulture', function() {
         assert.equal(17, date.getMinutes());
     });
 
+    it('12 AM means midnight', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('December 4, 1982 12:10 AM', {useCurrentDateForDefaults: true});
+        assert.equal(4, date.getDate());
+        assert.equal(12, date.getMonth() + 1);
+        assert.equal(1982, date.getFullYear());
+        assert.equal(0, date.getHours());
+        assert.equal(10, date.getMinutes());
+    });
+
+    it('12 PM means noon', function () {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('December 4, 1982 12:10 PM', {useCurrentDateForDefaults: true});
+        assert.equal(4, date.getDate());
+        assert.equal(12, date.getMonth() + 1);
+        assert.equal(1982, date.getFullYear());
+        assert.equal(12, date.getHours());
+        assert.equal(10, date.getMinutes());
+    });
+
     it('ignores PM specifier in 24 hours time', function () {
         let culture = new DateTimeCulture('en');
         let date = culture.parse('23:17 PM', {useCurrentDateForDefaults: true});

@@ -104,8 +104,10 @@ export class DateTimeCulture {
             result[timeComponent[i]] = timeParts.numbers[i];
 
         timeParts.alphas.forEach(x => {
-            if (x.toLowerCase() === 'pm' && result.hour < 12)
+            if (x.toLowerCase() === 'pm' && result.hour > 0 && result.hour < 12)
                 result.hour += 12;
+            if (x.toLowerCase() === 'am' && result.hour === 12)
+                result.hour = 0;
         });
 
         if (result.year >= 1970 &&
