@@ -157,6 +157,14 @@ describe('DateTimeCulture', function() {
         let time = new Date(2000, 1, 1, 17, 8, 9);
         assert(isNaN(culture.parse('abc', {useCurrentDateForDefaults: true})));
     });
+
+    it('parses and formats an old date in the same timezone', function () {
+        let culture = new DateTimeCulture('en');
+        let time = new Date("1979-05-31T02:59:00.000Z");
+        let formatted = culture.format(time, "yyyyMd HHmm");
+        let check = culture.parse(formatted);
+        assert.equal(time.getTime(), check.getTime());
+    });
 });
 
 describe('NumberCulture', function() {
