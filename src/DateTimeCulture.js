@@ -231,7 +231,7 @@ function parseOptions(fmt) {
     let weekday = count.D;
     if (weekday > 3)
         options.weekday = 'long';
-    if (weekday > 1)
+    else if (weekday > 1)
         options.weekday = 'short';
     else if (weekday > 0)
         options.weekday = 'narrow';
