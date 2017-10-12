@@ -8,11 +8,22 @@ require('babel-register', {
     retainLines: true
 });
 
+const hasFullICU = (() => {
+    try {
+        const january = new Date(9e8);
+        const spanish = new Intl.DateTimeFormat('es', { month: 'long' });
+        return spanish.format(january) === 'enero';
+    } catch (err) {
+        return false;
+    }
+})();
+
+if (!hasFullICU)
+console.warn('Full ICU not detected on the system.');
+
 let testCultures = ['sr', 'de', 'en', 'fr'];
 
-let Lib = require('../src/'),
-    NumberCulture = Lib.NumberCulture,
-    DateTimeCulture = Lib.DateTimeCulture;
+const {NumberCulture, DateTimeCulture} = require('../src/');
 
 describe('DateTimeCulture', function() {
 
