@@ -19,7 +19,7 @@ const hasFullICU = (() => {
 })();
 
 if (!hasFullICU)
-console.warn('Full ICU not detected on the system.');
+    console.warn('Full ICU not detected on the system.');
 
 let testCultures = ['sr', 'de', 'en', 'fr'];
 
@@ -49,6 +49,15 @@ describe('DateTimeCulture', function() {
         let date = culture.parse('2', {useCurrentDateForDefaults: true});
         assert.equal(1, date.getDate());
         assert.equal(2, date.getMonth() + 1);
+    });
+
+    it('parses old dates', function() {
+        let culture = new DateTimeCulture('en');
+        let date = culture.parse('1850/6/7');
+        assert(!isNaN(date));
+        assert.equal(7, date.getDate());
+        assert.equal(6, date.getMonth() + 1);
+        assert.equal(1850, date.getFullYear());
     });
 
     it('parses short month names', function () {

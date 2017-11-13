@@ -62,7 +62,7 @@ export class DateTimeCulture {
         });
 
         dateParts.numbers.forEach(value => {
-            if (value >= 1970)
+            if (value > 31)
                 result.year = value;
             else if (value > 12)
                 result.date = value;
@@ -110,8 +110,7 @@ export class DateTimeCulture {
                 result.hour = 0;
         });
 
-        if (result.year >= 1970 &&
-            result.date >= 1 && result.date <= 31 &&
+        if (result.date >= 1 && result.date <= 31 &&
             result.month >= 1 && result.month <= 12)
             return new Date(result.year,
                 result.month - 1,
