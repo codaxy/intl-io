@@ -337,5 +337,5 @@ function extractParts(text) {
 
 //https://www.csgpro.com/blog/2016/08/a-bad-date-with-internet-explorer-11-trouble-with-new-unicode-characters-in-javascript-date-strings
 function strip8206(str) {
-    return str.replace(/\u200E/g);
+    return str.replace(/\u200E/g, '');
 }
