@@ -1,6 +1,6 @@
 {
   "name": "intl-io",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Intl based number and date formatting and parsing.",
   "main": "dist/index.js",
   "scripts": {
