@@ -37,6 +37,15 @@ describe('DateTimeCulture', function() {
         assert.equal(inputDate.getFullYear(), parsedDate.getFullYear());
     });
 
+    it('parses formatted date in nl', function() {
+        let culture = new DateTimeCulture('nl');
+        let parsedDate = culture.parse('24 sep. 2018');
+        assert(!isNaN(parsedDate));
+        assert.equal(24, parsedDate.getDate());
+        assert.equal(8, parsedDate.getMonth());
+        assert.equal(2018, parsedDate.getFullYear());
+    });
+
     it('defaults to current month in sr culture', function () {
         let culture = new DateTimeCulture('sr');
         let date = culture.parse('1', {useCurrentDateForDefaults: true});

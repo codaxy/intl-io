@@ -136,7 +136,7 @@ export class DateTimeCulture {
         monthFormats.forEach(monthFormat => {
             let dateFormat = new Intl.DateTimeFormat(this.cultures, {month: monthFormat});
             for (i = 0; i < 12; i++) {
-                monthNames[i][monthFormat] = strip8206(dateFormat.format(new Date(2000, i, 15)));
+                monthNames[i][monthFormat] = strip8206(dateFormat.format(new Date(2000, i, 15))).replace(".", "");;
             }
         });
 
@@ -151,7 +151,7 @@ export class DateTimeCulture {
             let dateFormat = new Intl.DateTimeFormat(this.cultures, {weekday: weekdayFormat});
             for (i = 0; i < 7; i++) {
                 let date = new Date(2000, 0, i, 12, 0, 0);
-                weekdayNames[date.getDay()][weekdayFormat] = strip8206(dateFormat.format(date));
+                weekdayNames[date.getDay()][weekdayFormat] = strip8206(dateFormat.format(date)).replace(".", "");
             }
         });
 
