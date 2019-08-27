@@ -1,8 +1,8 @@
 # intl-io
 
-> Culture specific date/time and number formatting and parsing based on ECMAScript Internationalization API (Intl).
->
-> Used in [CxJS](https://cxjs.io/) for localized [calendars](https://docs.cxjs.io/widgets/calendars), [date fields](https://docs.cxjs.io/widgets/date-fields) and [number fields](https://docs.cxjs.io/widgets/number-fields).
+Culture specific date/time and number formatting and parsing based on ECMAScript Internationalization API (Intl).
+
+Used for localized [calendars](https://docs.cxjs.io/widgets/calendars), [date fields](https://docs.cxjs.io/widgets/date-fields) and [number fields](https://docs.cxjs.io/widgets/number-fields) in [CxJS](https://cxjs.io/).
 
 This module is available in three formats:
 
