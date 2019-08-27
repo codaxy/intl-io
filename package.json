@@ -13,6 +13,7 @@
     "LICENSE",
     "README.md"
   ],
+  "repository": "https://github.com/mstijak/intl-io",
   "author": "Marko Stijak",
   "license": "MIT",
   "devDependencies": {
