@@ -27,7 +27,7 @@ dateCulture.format(new Date(), 'yyyyMMdd'); //28/08/2019
 dateCulture.format(new Date(), 'yyyyMMMdd'); //28 ago. 2019
 dateCulture.format(new Date(), 'yyyyMMdd'); //28 de agosto de 2019
 dateCulture.format(new Date(), 'yyyyMMddDDD'); //mié., 28 de agosto de 2019
-let date = culture.parse('mié., 28 de agosto de 2019'); //Aug 28, 2019
+let date = culture.parse('mié., 28 de agosto de 2019', { loose: true }); //Aug 28, 2019
 
 let numberCulture = new NumberCulture('de');
 let formatter = numberCulture.getFormatter({
