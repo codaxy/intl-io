@@ -4,11 +4,12 @@ _Culture specific date/time and number formatting and **parsing** based on ECMAS
 
 Used for localized [calendars](https://docs.cxjs.io/widgets/calendars), [date fields](https://docs.cxjs.io/widgets/date-fields) and [number fields](https://docs.cxjs.io/widgets/number-fields) in [CxJS](https://cxjs.io/).
 
-This module is available in three formats:
+This module is available in four formats:
 
--   **ES Module**: `dist/index.m.js`
--   **CommonJS**: `dist/index.cjs.js`
--   **UMD**: `dist/index.umd.js`
+-   **CommonJS**: `dist/intl-io.js`
+-   **ES Module**: `dist/intl-io.module.js`
+-   **Modern ES Module**: `dist/intl-io.modern.js`
+-   **UMD**: `dist/intl-io.umd.js`
 
 ## Install
 
