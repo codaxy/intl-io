@@ -1,4 +1,11 @@
-# intl-io
+<h1>intl-io
+<a href="https://npmjs.org/package/intl-io">
+    <img src="https://badgen.now.sh/npm/v/intl-io" alt="version" />
+</a>
+<a href="https://npmjs.org/package/intl-io">
+    <img src="https://badgen.now.sh/npm/dm/intl-io" alt="downloads" />
+</a>
+</h1>
 
 _Culture specific date/time and number formatting and **parsing** based on ECMAScript Internationalization API (Intl)._
 
