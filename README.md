@@ -1,36 +1,37 @@
 # intl-io
 
-Culture specific date/time and number formatting and parsing based on ECMAScript Internationalization API (Intl).
+_Culture specific date/time and number formatting and **parsing** based on ECMAScript Internationalization API (Intl)._
 
 Used for localized [calendars](https://docs.cxjs.io/widgets/calendars), [date fields](https://docs.cxjs.io/widgets/date-fields) and [number fields](https://docs.cxjs.io/widgets/number-fields) in [CxJS](https://cxjs.io/).
 
 This module is available in three formats:
 
-- **ES Module**: `dist/index.m.js`
-- **CommonJS**: `dist/index.cjs.js`
-- **UMD**: `dist/index.umd.js`
+-   **ES Module**: `dist/index.m.js`
+-   **CommonJS**: `dist/index.cjs.js`
+-   **UMD**: `dist/index.umd.js`
 
 ## Install
 
 ```
-$ npm install --save intl-io
+$ npm install intl-io --save
 ```
 
 ## Usage
 
 ```js
-import {DateTimeCulture, NumberCulture} from 'intl-io';
+import { DateTimeCulture, NumberCulture } from 'intl-io';
 
 let dateCulture = new DateTimeCulture('es');
-dateCulture.format(new Date(), 'yyyyMMdd'); //TODO
-dateCulture.format(new Date(), 'yyyyMMmdd'); //TODO
-dateCulture.format(new Date(), 'yyyyMMdd'); //TODO
-let date = culture.parse('XXX'); //date
+dateCulture.format(new Date(), 'yyyyMMdd'); //28/08/2019
+dateCulture.format(new Date(), 'yyyyMMMdd'); //28 ago. 2019
+dateCulture.format(new Date(), 'yyyyMMdd'); //28 de agosto de 2019
+dateCulture.format(new Date(), 'yyyyMMddDDD'); //mié., 28 de agosto de 2019
+let date = culture.parse('mié., 28 de agosto de 2019'); //Aug 28, 2019
 
 let numberCulture = new NumberCulture('de');
 let formatter = numberCulture.getFormatter({
-  style: 'currency',
-  currency: 'EUR',
+    style: 'currency',
+    currency: 'EUR',
 });
 let currency = formatter.format(5555.5); //5.555,50 €
 let number = numberCulture.parse('5.555,5'); //5555.5
@@ -42,18 +43,18 @@ For number formatting options look at https://developer.mozilla.org/en-US/docs/W
 
 Some parts support different length. Four digits means full name, three digits is a long form, two digits is medium and one digit is short form.
 
-- `YYYY` - full year (2019)
-- `YY` - short year (19)
+-   `YYYY` - full year (e.g. 2019)
+-   `YY` - short year (e.g. 19)
 
-* `MMMM` - full month name (August)
-* `MMM` - short month name (Aug)
-* `MM` - two digit month (08)
-* `M` - single digit month (8)
+*   `MMMM` - long month name (e.g. August)
+*   `MMM` - short month name (e.g. Aug)
+*   `MM` - two digit month (e.g. 08)
+*   `M` - numeric month (e.g. 8)
 
-- `DDDD` - full day name (Monday)
-- `DDD` - short day name (Mon)
-- `DD` - short day name (Mo)
-- `D` - short day name (M)
+-   `DDDD` - full day name (e.g. Monday)
+-   `DDD` - short day name (e.g. Mon)
+-   `DD` - short day name (e.g. Mo)
+-   `D` - short day name (e.g. M)
 
 ### Examples
 
