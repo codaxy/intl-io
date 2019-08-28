@@ -16,8 +16,8 @@
         "LICENSE",
         "README.md"
     ],
-    "repository": "https://github.com/mstijak/intl-io",
-    "author": "Marko Stijak",
+    "repository": "https://github.com/codaxy/intl-io",
+    "author": "Codaxy",
     "license": "MIT",
     "devDependencies": {
         "esm": "^3.2.25",

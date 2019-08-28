@@ -88,4 +88,4 @@ For detailed date formatting options look at https://developer.mozilla.org/en-US
 
 ## License
 
-MIT © Marko Stijak
+MIT © [Codaxy](https://www.codaxy.com)
