@@ -7,8 +7,9 @@ const defaultOptions = {
 };
 
 export class DateTimeCulture {
-    constructor(cultures) {
+    constructor(cultures, options) {
         this.cultures = cultures;
+        this.options = options || {};
     }
 
     format(date, options, timezone) {
@@ -16,7 +17,10 @@ export class DateTimeCulture {
     }
 
     getFormatter(options, timezone) {
-        return new Intl.DateTimeFormat(this.cultures, parseOptions(options, timezone));
+        return new Intl.DateTimeFormat(
+            this.cultures,
+            parseOptions(options, timezone || this.options.defaultTimezone),
+        );
     }
 
     getWeekdayNames(fmt) {
