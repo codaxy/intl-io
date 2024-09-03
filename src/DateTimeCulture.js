@@ -11,22 +11,22 @@ export class DateTimeCulture {
         this.cultures = cultures;
     }
 
-    format(date, options) {
-        return this.getFormatter(options).format(date);
+    format(date, options, timezone) {
+        return this.getFormatter(options, timezone).format(date);
     }
 
-    getFormatter(options) {
-        return new Intl.DateTimeFormat(this.cultures, parseOptions(options));
+    getFormatter(options, timezone) {
+        return new Intl.DateTimeFormat(this.cultures, parseOptions(options, timezone));
     }
 
     getWeekdayNames(fmt) {
         this.load();
-        return this.weekdayNames.map(x => x[fmt]);
+        return this.weekdayNames.map((x) => x[fmt]);
     }
 
     getMonthNames(fmt) {
         this.load();
-        return this.monthNames.map(x => x[fmt]);
+        return this.monthNames.map((x) => x[fmt]);
     }
 
     parse(text, { useCurrentDateForDefaults, loose } = defaultOptions) {
@@ -49,7 +49,7 @@ export class DateTimeCulture {
 
         let unmatchedPart = false;
 
-        dateParts.alphas.forEach(value => {
+        dateParts.alphas.forEach((value) => {
             for (let i = 0; i < 12; i++)
                 for (let fmt in this.monthNames[i])
                     if (value === this.monthNames[i][fmt].toLowerCase()) {
@@ -59,7 +59,7 @@ export class DateTimeCulture {
             unmatchedPart = true;
         });
 
-        dateParts.numbers.forEach(value => {
+        dateParts.numbers.forEach((value) => {
             if (value > 31) result.year = value;
             else if (value > 12) result.date = value;
             else {
@@ -93,7 +93,7 @@ export class DateTimeCulture {
         for (let i = 0; i < Math.min(timeParts.numbers.length, timeComponent.length); i++)
             result[timeComponent[i]] = timeParts.numbers[i];
 
-        timeParts.alphas.forEach(x => {
+        timeParts.alphas.forEach((x) => {
             if (x.toLowerCase() === 'pm' && result.hour > 0 && result.hour < 12) result.hour += 12;
             if (x.toLowerCase() === 'am' && result.hour === 12) result.hour = 0;
         });
@@ -119,7 +119,7 @@ export class DateTimeCulture {
         let monthNames = [];
         for (let m = 0; m < 12; m++) monthNames.push({});
 
-        monthFormats.forEach(monthFormat => {
+        monthFormats.forEach((monthFormat) => {
             let dateFormat = new Intl.DateTimeFormat(this.cultures, { month: monthFormat });
             for (i = 0; i < 12; i++) {
                 monthNames[i][monthFormat] = strip8206(
@@ -133,7 +133,7 @@ export class DateTimeCulture {
         let weekdayNames = [];
         for (i = 0; i < 7; i++) weekdayNames.push({});
 
-        weekdayFormats.forEach(weekdayFormat => {
+        weekdayFormats.forEach((weekdayFormat) => {
             let dateFormat = new Intl.DateTimeFormat(this.cultures, { weekday: weekdayFormat });
             for (i = 0; i < 7; i++) {
                 let date = new Date(2000, 0, i, 12, 0, 0);
@@ -157,7 +157,7 @@ export class DateTimeCulture {
     }
 }
 
-function parseOptions(fmt) {
+function parseOptions(fmt, timezone) {
     if (typeof fmt !== 'string') return fmt;
 
     let count = {
@@ -233,6 +233,7 @@ function parseOptions(fmt) {
 
     let utc = count.U + count.u + count.Z + count.z;
     if (utc > 0) options.timeZone = 'UTC';
+    else options.timeZone = timezone;
 
     return options;
 }
