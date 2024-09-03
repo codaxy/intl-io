@@ -1,6 +1,6 @@
 {
     "name": "intl-io",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "Number and date formatting and parsing based on ECMAScript Internationalization API (Intl).",
     "source": "src/index.js",
     "module": "dist/intl-io.module.js",
