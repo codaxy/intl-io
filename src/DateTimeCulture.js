@@ -237,7 +237,7 @@ function parseOptions(fmt, timezone) {
 
     let utc = count.U + count.u + count.Z + count.z;
     if (utc > 0) options.timeZone = 'UTC';
-    else options.timeZone = timezone;
+    else if (timezone != null) options.timeZone = timezone;
 
     return options;
 }
