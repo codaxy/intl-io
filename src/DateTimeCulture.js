@@ -65,7 +65,7 @@ export class DateTimeCulture {
 
         dateParts.numbers.forEach((value) => {
             if (value > 31) result.year = value;
-            else if (value > 12) result.date = value;
+            else if (value > 12 && result.date === undefined) result.date = value;
             else {
                 for (let dp = 0; dp < this.dateParts.length; dp++) {
                     let name = this.dateParts[dp];
@@ -79,6 +79,11 @@ export class DateTimeCulture {
         });
 
         if (unmatchedPart && !loose) return NaN;
+
+        if (result.year !== undefined && result.year < 100) {
+            let currentYear = new Date().getFullYear();
+            result.year += currentYear - (currentYear % 100);
+        }
 
         if (useCurrentDateForDefaults) {
             if (result.date === undefined)

@@ -229,6 +229,30 @@ describe('DateTimeCulture', function () {
         let check = culture.parse(formatted);
         assert.equal(time.getTime(), check.getTime());
     });
+
+    it('low-dates-are-parsed-correctly', function () {
+        let culture = new DateTimeCulture('en');
+        let time = culture.parse('9-6-25');
+        assert.equal(time.getDate(), 6);
+        assert.equal(time.getMonth(), 8); // (0-based)
+        assert.equal(time.getFullYear(), 2025);
+    });
+
+    it('dates are recognized by value even in the wrong order', function () {
+        let culture = new DateTimeCulture('en');
+        let time = culture.parse('13-6-25');
+        assert.equal(time.getDate(), 13);
+        assert.equal(time.getMonth(), 5); // (0-based)
+        assert.equal(time.getFullYear(), 2025);
+    });
+
+    it('number over 31 is recognized as a year', function () {
+        let culture = new DateTimeCulture('en');
+        let time = culture.parse('2024-6-25');
+        assert.equal(time.getDate(), 25);
+        assert.equal(time.getMonth(), 5); // (0-based)
+        assert.equal(time.getFullYear(), 2024);
+    });
 });
 
 describe('NumberCulture', function () {
